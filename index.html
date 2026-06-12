@@ -22,18 +22,24 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-@media (max-width: 768px){
 
-    .floating{
-        display:none;
+    @media (max-width: 768px){
+
+    .glass{
+        width:100%;
     }
 
-    body{
-        overflow-x:hidden;
+    #detail .glass{
+        padding:1.5rem;
     }
 
-    section{
-        overflow-x:hidden;
+    #detail h3{
+        font-size:1.5rem;
+    }
+
+    iframe{
+        width:100%;
+        height:250px;
     }
 
 }
@@ -260,12 +266,20 @@ Wisuda 2026
 </span>
 </div>
 
-<div class="leading-tight mb-6">
-    <div class="text-3xl md:text-4xl font-semibold title-font">Graduate</div>
-    <h1 class="title-font text-5xl md:text-7xl font-extrabold mt-2">
-        <span class="text-orange-400">Wisuda 2026</span>
+<div class="leading-tight mb-6 text-center md:text-left">
+
+    <div class="text-2xl sm:text-3xl md:text-4xl font-semibold title-font">
+        Graduate
+    </div>
+
+    <h1 class="title-font font-extrabold mt-2">
+        <span
+            class="block text-orange-400 text-5xl sm:text-6xl md:text-7xl"
+        >
+            Wisuda 2026
+        </span>
     </h1>
-    <p class="text-slate-200 mt-3 font-medium"></p>
+
 </div>
 
 <!-- Graduate name (can be overridden with ?student=Name) -->
@@ -409,10 +423,10 @@ class="mt-8 flex justify-center md:justify-start items-center gap-3 bg-orange-10
 
 </div>
 
-<div class="grid md:grid-cols-2 gap-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
 <!-- CARD -->
-<div class="glass rounded-3xl p-10">
+<div class="glass rounded-3xl p-6 md:p-10">
 
 <div class="flex items-center gap-4 mb-6">
 
@@ -438,50 +452,29 @@ Momen spesial kelulusan
 
 </div>
 
-<div class="space-y-5">
+<div class="space-y-4">
 
-<div class="flex justify-between border-b border-white/10 pb-4">
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-1 border-b border-white/10 pb-4">
+        <span class="text-gray-600">Hari</span>
+        <span class="font-semibold">Minggu</span>
+    </div>
 
-<span class="text-gray-600">
-Hari
-</span>
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-1 border-b border-white/10 pb-4">
+        <span class="text-gray-600">Tanggal</span>
+        <span class="font-semibold">21 Juni 2026</span>
+    </div>
 
-<span class="font-semibold">
-Minggu
-</span>
-
-</div>
-
-<div class="flex justify-between border-b border-white/10 pb-4">
-
-<span class="text-gray-600">
-Tanggal
-</span>
-
-<span class="font-semibold">
-21 Juni 2026
-</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span class="text-gray-600">
-Waktu
-</span>
-
-<span class="font-semibold">
-10:00 WIB
-</span>
-
-</div>
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+        <span class="text-gray-600">Waktu</span>
+        <span class="font-semibold">10:00 WIB</span>
+    </div>
 
 </div>
 
 </div>
 
 <!-- CARD -->
-<div class="glass rounded-3xl p-10">
+<div class="glass rounded-3xl p-6 md:p-10">
 
 <div class="flex items-center gap-4 mb-6">
 

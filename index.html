@@ -146,6 +146,22 @@ body{
     margin-top: .25rem;
 }
 
+@media (max-width:768px){
+
+    .max-w-6xl{
+        width:100%;
+        max-width:100%;
+    }
+
+    .timeline-column{
+        padding-left:0;
+    }
+
+    .glass{
+        width:100%;
+    }
+
+}
 
 </style>
 </head>
@@ -205,7 +221,7 @@ military_tech
 </span>
 </div>
 
-<div class="max-w-6xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+<div class="w-full max-w-6xl mx-auto flex flex-col md:grid md:grid-cols-2 gap-10 md:gap-16 items-center">
 
 <!-- FOTO -->
 <div class="relative flex justify-center">
@@ -232,7 +248,7 @@ military_tech
 </div>
 
 <!-- TEXT -->
-<div class="text-center md:text-left">
+<div class="w-full text-center md:text-left">
 
 <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full glass mb-6">
 <span class="material-symbols-outlined text-orange-400">
@@ -255,7 +271,7 @@ Wisuda 2026
 <!-- Graduate name (can be overridden with ?student=Name) -->
 <div class="text-lg font-semibold text-gray-800 mb-3"><span id="grad-name"></span></div>
 
-<p class="text-base md:text-xl text-gray-700 leading-loose max-w-xl mx-auto md:mx-0 mb-8">
+<p class="text-base md:text-xl text-gray-700 leading-loose w-full max-w-xl mx-auto md:mx-0 mb-8 px-2">
 Dengan penuh rasa syukur, <br>saya mengundang Bapak/Ibu/Saudara/i untuk hadir dan menjadi bagian dari momen kelulusan ini.
 
 Perjalanan ini tidak akan sampai di titik ini tanpa doa, dukungan, dan kebersamaan dari orang-orang terdekat. Terima kasih telah menjadi bagian dari cerita ini.
@@ -613,7 +629,8 @@ function showRsvpMessage(text, success) {
     }, 5000);
 }
 
-rsvpForm.addEventListener('submit', async function(e) {
+if (rsvpForm) {
+    rsvpForm.addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const nama = document.getElementById('rsvp-name').value.trim();

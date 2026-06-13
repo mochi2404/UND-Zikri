@@ -597,45 +597,114 @@ if (invitedAsInput && invitedTo) {
     invitedAsInput.value = invitedTo;
 }
 
-// COVER OPEN/CLOSE
-const cover = document.getElementById('cover-overlay');
-const mainContent = document.getElementById('main-content');
-const openBtn = document.getElementById('openInvitation');
-const coverNameEl = document.getElementById('cover-guest-name');
-const guestDisplay = document.getElementById('guest-display');
-const guestNameDisplay = document.getElementById('guest-name-display');
-
-if (coverNameEl) {
-    coverNameEl.textContent = invitedTo || 'Tamu Istimewa';
+// Populate cover guest name (if present) and wire cover open/close
+try{
+    const coverNameEl = document.getElementById('cover-guest-name');
+    const cover = document.getElementById('cover-overlay');
+    const mainContent = document.getElementById('main-content');
+    const openBtn = document.getElementById('openInvitation');
+    if (coverNameEl) {
+    coverNameEl.textContent =
+        invitedTo || 'Tamu Istimewa';
 }
 
-if (invitedTo && guestDisplay && guestNameDisplay) {
+const guestDisplay =
+document.getElementById('guest-display');
+
+const guestNameDisplay =
+document.getElementById('guest-name-display');
+
+if (
+    invitedTo &&
+    guestDisplay &&
+    guestNameDisplay
+) {
+
     guestDisplay.classList.remove('hidden');
-    guestNameDisplay.textContent = invitedTo;
+
+    guestNameDisplay.textContent =
+        invitedTo;
+}
+    function revealInvitation(playMusic){
+        if (cover) cover.style.display = 'none';
+        if (mainContent){
+            mainContent.classList.remove('opacity-0');
+            mainContent.classList.add('opacity-100');
+            mainContent.classList.remove('pointer-events-none');
+        }
+        if (playMusic){
+            try{ music.play(); music.volume = 0.5; musicIcon.classList.add('animate-spin'); musicIcon.innerText='music_note'; }catch(e){}
+        }
+        window.scrollTo(0,0);
+    }
+
+    if (openBtn) openBtn.addEventListener('click', ()=> revealInvitation(true));
+}catch(e){console.warn(e)}
+
+function showRsvpMessage(text, success) {
+    rsvpFeedback.textContent = text;
+    rsvpFeedback.className = success
+        ? 'text-center text-sm font-medium text-emerald-400'
+        : 'text-center text-sm font-medium text-rose-400';
+    rsvpFeedback.classList.remove('hidden');
+    clearTimeout(window.__rsvpMessageTimeout);
+    window.__rsvpMessageTimeout = setTimeout(() => {
+        rsvpFeedback.classList.add('hidden');
+    }, 5000);
 }
 
-function revealInvitation() {
+if (rsvpForm) {
+    rsvpForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-    cover.style.display = 'none';
+    const nama = document.getElementById('rsvp-name').value.trim();
+    const attendance = document.getElementById('attendance-select').value;
+    const guests = Number(document.getElementById('guest-count').value) || 1;
+    const pesan = document.getElementById('rsvp-message').value.trim();
+    const invitedAs = invitedAsInput.value.trim();
 
-    mainContent.classList.remove('opacity-0');
-    mainContent.classList.remove('pointer-events-none');
-    mainContent.classList.add('opacity-100');
+    if (!nama || !attendance || !pesan) {
+        showRsvpMessage('Harap isi semua kolom sebelum mengirim.', false);
+        return;
+    }
 
-    music.play().catch(() => {});
+    rsvpSubmit.disabled = true;
+    rsvpSubmit.textContent = 'Mengirim...';
+
+    try {
+        const response = await fetch('/api/rsvp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nama, attendance, guests, pesan, invitedAs })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Gagal mengirim konfirmasi.');
+
+        showRsvpMessage('Konfirmasi berhasil diterima. Terima kasih!', true);
+        rsvpForm.reset();
+        invitedAsInput.value = invitedTo || '';
+    } catch (error) {
+        showRsvpMessage(error.message || 'Terjadi kesalahan. Coba lagi nanti.', false);
+    } finally {
+        rsvpSubmit.disabled = false;
+        rsvpSubmit.textContent = 'Kirim Konfirmasi';
+    }
+});
 }
-
-if (openBtn) {
-    openBtn.addEventListener('click', revealInvitation);
-}
-
-    console.log("Button:", openBtn);
 
 // Countdown to event: 21 June 2026 10:00 WIB
 (function () {
 
-    // 22 Juni 2026 jam 10:00 WIB (UTC+7)
-    const targetDate = new Date("2026-06-22T10:00:00+07:00");
+    const targetDate = new Date(
+        2026, // tahun
+        5,    // bulan (0=Jan, 5=Juni)
+        22,   // tanggal
+        10,   // jam
+        0,
+        0
+    );
 
     const daysEl = document.getElementById('cd-days');
     const hoursEl = document.getElementById('cd-hours');
@@ -645,7 +714,7 @@ if (openBtn) {
     function updateCountdown() {
 
         const now = new Date();
-        const distance = targetDate.getTime() - now.getTime();
+        const distance = targetDate - now;
 
         if (distance <= 0) {
 
@@ -653,12 +722,11 @@ if (openBtn) {
                 '<span class="font-bold text-orange-600">ACARA SEDANG BERLANGSUNG</span>';
 
             clearInterval(timer);
+
             return;
         }
 
-        const days = Math.floor(
-            distance / (1000 * 60 * 60 * 24)
-        );
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
 
         const hours = Math.floor(
             (distance % (1000 * 60 * 60 * 24))
@@ -683,13 +751,36 @@ if (openBtn) {
 
     updateCountdown();
 
-    const timer = setInterval(
-        updateCountdown,
-        1000
-    );
+    const timer = setInterval(updateCountdown, 1000);
 
 })();
 
+</script>
+<script>
+const targetDate = new Date("June 22, 2026 10:00:00").getTime();
 
+const timer = setInterval(() => {
+
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("cd-days").textContent = days;
+    document.getElementById("cd-hours").textContent = hours;
+    document.getElementById("cd-mins").textContent = minutes;
+    document.getElementById("cd-secs").textContent = seconds;
+
+    if (distance < 0) {
+        clearInterval(timer);
+        document.getElementById("countdown").innerHTML =
+            "ACARA SEDANG BERLANGSUNG";
+    }
+
+}, 1000);
+</script>
 </body>
 </html>

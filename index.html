@@ -198,7 +198,14 @@ music_note
             </div>
             <p class="text-gray-700 text-sm">Anda diundang untuk hadir pada acara</p>
         </div>
-        <h1 class="title-font text-4xl md:text-5xl font-bold mb-2 cover-guest" id="cover-guest-name">Tamu Istimewa</h1>
+        <p class="text-gray-600 text-sm mb-2">
+Kepada Yth.
+</p>
+
+<h1 class="title-font text-4xl md:text-5xl font-bold mb-2 cover-guest"
+id="cover-guest-name">
+Tamu Istimewa
+</h1>
         <p class="text-gray-600 mb-6">Mohon maaf jika terdapat kekeliruan penulisan nama. Silakan buka undangan.</p>
         <div class="flex items-center justify-center gap-4">
             <button id="openInvitation" class="btn-primary cover-open-btn">
@@ -284,6 +291,20 @@ Wisuda 2026
 
 <!-- Graduate name (can be overridden with ?student=Name) -->
 <div class="text-lg font-semibold text-gray-800 mb-3"><span id="grad-name"></span></div>
+
+<!-- Nama Tamu -->
+<div id="guest-display"
+class="hidden mb-6 glass px-6 py-4 rounded-2xl">
+
+    <p class="text-sm uppercase tracking-[3px] text-gray-500">
+        Kepada Yth.
+    </p>
+
+    <h3 id="guest-name-display"
+    class="title-font text-2xl md:text-3xl font-bold text-orange-500 mt-2">
+    </h3>
+
+</div>
 
 <p class="text-base md:text-xl text-gray-700 leading-loose w-full max-w-xl mx-auto md:mx-0 mb-8 px-2">
 Dengan penuh rasa syukur, <br>saya mengundang Bapak/Ibu/Saudara/i untuk hadir dan menjadi bagian dari momen kelulusan ini.
@@ -582,7 +603,8 @@ function getQueryParam(name) {
 }
 
 const invitedTo = getQueryParam('to');
-if (invitedTo) {
+
+if (invitedAsInput && invitedTo) {
     invitedAsInput.value = invitedTo;
 }
 
@@ -592,8 +614,28 @@ try{
     const cover = document.getElementById('cover-overlay');
     const mainContent = document.getElementById('main-content');
     const openBtn = document.getElementById('openInvitation');
-    if (coverNameEl) coverNameEl.textContent = invitedTo || 'Tamu Istimewa';
+    if (coverNameEl) {
+    coverNameEl.textContent =
+        invitedTo || 'Tamu Istimewa';
+}
 
+const guestDisplay =
+document.getElementById('guest-display');
+
+const guestNameDisplay =
+document.getElementById('guest-name-display');
+
+if (
+    invitedTo &&
+    guestDisplay &&
+    guestNameDisplay
+) {
+
+    guestDisplay.classList.remove('hidden');
+
+    guestNameDisplay.textContent =
+        invitedTo;
+}
     function revealInvitation(playMusic){
         if (cover) cover.style.display = 'none';
         if (mainContent){

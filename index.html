@@ -697,14 +697,8 @@ if (rsvpForm) {
 // Countdown to event: 21 June 2026 10:00 WIB
 (function () {
 
-    const targetDate = new Date(
-        2026, // tahun
-        5,    // bulan (0=Jan, 5=Juni)
-        22,   // tanggal
-        10,   // jam
-        0,
-        0
-    );
+    // 22 Juni 2026 jam 10:00 WIB (UTC+7)
+    const targetDate = new Date("2026-06-22T10:00:00+07:00");
 
     const daysEl = document.getElementById('cd-days');
     const hoursEl = document.getElementById('cd-hours');
@@ -714,7 +708,7 @@ if (rsvpForm) {
     function updateCountdown() {
 
         const now = new Date();
-        const distance = targetDate - now;
+        const distance = targetDate.getTime() - now.getTime();
 
         if (distance <= 0) {
 
@@ -722,11 +716,12 @@ if (rsvpForm) {
                 '<span class="font-bold text-orange-600">ACARA SEDANG BERLANGSUNG</span>';
 
             clearInterval(timer);
-
             return;
         }
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const days = Math.floor(
+            distance / (1000 * 60 * 60 * 24)
+        );
 
         const hours = Math.floor(
             (distance % (1000 * 60 * 60 * 24))
@@ -751,36 +746,13 @@ if (rsvpForm) {
 
     updateCountdown();
 
-    const timer = setInterval(updateCountdown, 1000);
+    const timer = setInterval(
+        updateCountdown,
+        1000
+    );
 
 })();
 
-</script>
-<script>
-const targetDate = new Date("June 22, 2026 10:00:00").getTime();
 
-const timer = setInterval(() => {
-
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById("cd-days").textContent = days;
-    document.getElementById("cd-hours").textContent = hours;
-    document.getElementById("cd-mins").textContent = minutes;
-    document.getElementById("cd-secs").textContent = seconds;
-
-    if (distance < 0) {
-        clearInterval(timer);
-        document.getElementById("countdown").innerHTML =
-            "ACARA SEDANG BERLANGSUNG";
-    }
-
-}, 1000);
-</script>
 </body>
 </html>
